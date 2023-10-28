@@ -1,7 +1,7 @@
 {
-  "name": "zappar-threejs-example",
+  "name": "fanisko-diwali",
   "version": "0.0.0",
-  "description": "Example using Zappar's ThreeJS wrapper",
+  "description": "An AR Filter for Diwali",
   "source": "src/index.html",
   "scripts": {
     "start": "parcel --https",
