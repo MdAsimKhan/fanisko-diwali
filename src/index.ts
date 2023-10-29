@@ -115,7 +115,7 @@ const particlesMaterial = new THREE.PointsMaterial({
   color: particleColor,
 });
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-scene.add(particles);
+instantTrackerGroup.add(particles);
 
 // Generate random particle positions and colors
 const positions = [];
