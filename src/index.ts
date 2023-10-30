@@ -116,19 +116,19 @@ gltfLoader.load(
 
 //==================FIRE CRACKERs========================
 
-function getRandomHexColorWithAlpha() {
-  // Generate a random integer between 0 and 0xffffff (16777215 in decimal)
-  const randomColor = Math.floor(Math.random() * 0xffffff);
-  // Convert the integer to a hexadecimal string with '0x' prefix
-  const hexColor = `0x${randomColor.toString(16)}`;
-  // Add the '1' at the end
-  return `${hexColor}1`;
-}
+// function getRandomHexColorWithAlpha() {
+//   // Generate a random integer between 0 and 0xffffff (16777215 in decimal)
+//   const randomColor = Math.floor(Math.random() * 0xffffff);
+//   // Convert the integer to a hexadecimal string with '0x' prefix
+//   const hexColor = `0x${randomColor.toString(16)}`;
+//   // Add the '1' at the end
+//   return `${hexColor}1`;
+// }
 
 // Particle system parameters
 const particleCount = 10000; // Adjust the number of particles as desired
 const particleSize = 0.006; // Adjust the size of the particles
-const particleColor = getRandomHexColorWithAlpha(); // Adjust the color of the particles
+const particleColor = 0xf4a146; // Adjust the color of the particles
 
 // Create the particle system
 const particlesGeometry = new THREE.BufferGeometry();
