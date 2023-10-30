@@ -104,8 +104,8 @@ function getRandomHexColorWithAlpha() {
 }
 
 // Particle system parameters
-const particleCount = 1000; // Adjust the number of particles as desired
-const particleSize = 0.06; // Adjust the size of the particles
+const particleCount = 10000; // Adjust the number of particles as desired
+const particleSize = 0.006; // Adjust the size of the particles
 const particleColor = getRandomHexColorWithAlpha(); // Adjust the color of the particles
 
 // Create the particle system
