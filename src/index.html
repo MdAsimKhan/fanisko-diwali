@@ -43,6 +43,10 @@
     photoButton.style.display = "block";
 //firecracker
 function createFirecrackerAnimation() {
+
+    imageButton.style.visibility = "visible";
+        imageButton.classList.add("bounce");
+
   var c = document.getElementById("firecrackerCanvas");
   var ctx = c.getContext("2d");
 
@@ -173,7 +177,11 @@ function createFirecrackerAnimation() {
 }
 
 const firecrackerButton = document.getElementById("tap-to-place");
-firecrackerButton.addEventListener("click", createFirecrackerAnimation);
+const imageButton = document.getElementById("image");
+imageButton.style.visibility = "hidden";
+firecrackerButton.addEventListener("click", createFirecrackerAnimation 
+
+);
 
 
     // Add click event listeners to the text elements

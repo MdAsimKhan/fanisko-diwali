@@ -4,12 +4,14 @@
 // In this example we track a 3D model using instant world tracking
 
 import * as THREE from "three";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import * as ZapparThree from "@zappar/zappar-threejs";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import ZapparSharing from "@zappar/sharing";
 import * as ZapparVideoRecorder from "@zappar/video-recorder";
 const model = new URL("../assets/diwali_3d_poster.glb", import.meta.url).href;
 import "./index.css";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 // The SDK is supported on many different browsers, but there are some that
 // don't provide camera access. This function detects if the browser is supported
 // For more information on support, check out the readme over at
@@ -222,6 +224,43 @@ const placeButton =
 placeButton.addEventListener("click", () => {
   hasPlaced = true;
   mymodel.visible = true;
+  particles.visible = false;
+
+  //add fanisko text
+
+  //=====================ADDING 3D TEXT===============
+
+  // Load your font
+  // Create a font loader
+  const fontLoader = new FontLoader();
+
+  // Use the default font (helvetiker) - you can choose a different one if desired
+  fontLoader.load(
+    "https://cdn.rawgit.com/mrdoob/three.js/r125/examples/fonts/helvetiker_regular.typeface.json",
+    function (font) {
+      createText(font);
+    }
+  );
+
+  function createText(font: any) {
+    const textGeometry = new TextGeometry("FANISKO \n WISHES YOU", {
+      font: font,
+      size: 0.2, // Adjust the size as needed
+      height: 0.05, // Adjust the thickness as needed
+    });
+
+    const textMaterial = new THREE.MeshBasicMaterial({ color: 0xf4a146 }); // Adjust the text color as needed
+    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+    textMesh.scale.set(0.8, 0.8, 0.8);
+    textMesh.position.x = -1;
+    textMesh.position.y = 2;
+    // Position the text within your scene
+    // textMesh.position.set(-1, 0.2, -3); // Adjust the position as needed
+
+    // Add the text to the scene
+    instantTrackerGroup.add(textMesh);
+  }
+
   placeButton.remove();
   arrow.remove();
 });
