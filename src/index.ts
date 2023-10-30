@@ -105,7 +105,7 @@ function getRandomHexColorWithAlpha() {
 
 // Particle system parameters
 const particleCount = 1000; // Adjust the number of particles as desired
-const particleSize = 0.1; // Adjust the size of the particles
+const particleSize = 0.06; // Adjust the size of the particles
 const particleColor = getRandomHexColorWithAlpha(); // Adjust the color of the particles
 
 // Create the particle system
@@ -142,6 +142,53 @@ particlesGeometry.setAttribute(
   new THREE.Float32BufferAttribute(colors, 3)
 );
 
+// spiral
+
+// const particlesGeometry2 = new THREE.BufferGeometry();
+
+// const particleCount2 = 1000000;
+// const positions2 = new Float32Array(particleCount * 3);
+// const colors2 = new Float32Array(particleCount * 3);
+
+// const particleColor2 = new THREE.Color(0xffa500); // Fire color
+
+// const spiral = (t: any) => {
+//   const r = t; // Radius increases linearly with time
+//   const theta = 50 * t; // Angle increases linearly with time
+//   const x = r * Math.cos(theta);
+//   const y = r * Math.sin(theta);
+//   const z = (Math.random() - 0.5) * 2;
+//   return new THREE.Vector3(x, y, z);
+// };
+
+// for (let i = 0; i < particleCount2; i++) {
+//   const t = i / (particleCount2 - 1); // Linearly distribute points along the spiral
+//   const point = spiral(t);
+
+//   positions2[i * 3] = point.x;
+//   positions2[i * 3 + 1] = point.y;
+//   positions2[i * 3 + 2] = point.z;
+
+//   colors2[i * 3] = particleColor2.r;
+//   colors2[i * 3 + 1] = particleColor2.g;
+//   colors2[i * 3 + 2] = particleColor2.b;
+// }
+
+// particlesGeometry2.setAttribute(
+//   "position",
+//   new THREE.BufferAttribute(positions2, 3)
+// );
+// particlesGeometry2.setAttribute("color", new THREE.BufferAttribute(colors2, 3));
+
+// const particlesMaterial2 = new THREE.PointsMaterial({
+//   size: 0.05,
+//   //@ts-ignore
+//   vertexColors: THREE.VertexColors,
+// });
+
+// const particles2 = new THREE.Points(particlesGeometry2, particlesMaterial2);
+// instantTrackerGroup.add(particles2);
+
 // Let's add some lighting, first a directional light above the model pointing down
 const directionalLight = new THREE.DirectionalLight("white", 0.8);
 directionalLight.position.set(0, 5, 0);
@@ -165,8 +212,7 @@ placeButton.addEventListener("click", () => {
 });
 
 // Get a reference to the 'Snapshot' button so we can attach a 'click' listener
-const canvas =
-  document.querySelector("canvas") || document.createElement("canvas");
+const canvas = document.getElementById("firecrackerCanvas");
 
 const imageBtn =
   document.getElementById("image") || document.createElement("div");
@@ -237,6 +283,7 @@ function render(): void {
     }
   }
   particlesGeometry.getAttribute("position").needsUpdate = true;
+  // particles.rotation.z += 0.001;
 
   // The Zappar camera must have updateFrame called every frame
   camera.updateFrame(renderer);
