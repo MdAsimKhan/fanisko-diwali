@@ -72,16 +72,16 @@ const instantTrackerGroup = new ZapparThree.InstantWorldAnchorGroup(
 scene.add(instantTrackerGroup);
 
 //==================FRAME============================
-const frameSrc = new URL("../assets/frame.png", import.meta.url).href;
-const frameTexture = new THREE.TextureLoader(manager).load(frameSrc);
-const frame = new THREE.Mesh(
-  new THREE.PlaneBufferGeometry(),
-  new THREE.MeshBasicMaterial({ map: frameTexture, transparent: true })
-);
-frame.scale.set(2, 3.3, 1);
-// frame.position.set(0, 0, -0.1);
-instantTrackerGroup.add(frame);
-console.log(frame);
+// const frameSrc = new URL("../assets/frame.png", import.meta.url).href;
+// const frameTexture = new THREE.TextureLoader(manager).load(frameSrc);
+// const frame = new THREE.Mesh(
+//   new THREE.PlaneBufferGeometry(),
+//   new THREE.MeshBasicMaterial({ map: frameTexture, transparent: true })
+// );
+// frame.scale.set(2, 3.3, 1);
+// // frame.position.set(0, 0, -0.1);
+// instantTrackerGroup.add(frame);
+// console.log(frame);
 
 // Load a 3D model to place within our group (using ThreeJS's GLTF loader)
 // Pass our loading manager in to ensure the progress bar works correctly
@@ -215,12 +215,15 @@ instantTrackerGroup.add(ambientLight);
 // the content to appear using setAnchorPoseFromCameraOffset (see below)
 // The user can confirm the location by tapping on the screen
 let hasPlaced = false;
+
+const arrow = document.getElementById("arrow2");
 const placeButton =
   document.getElementById("tap-to-place") || document.createElement("div");
 placeButton.addEventListener("click", () => {
   hasPlaced = true;
   mymodel.visible = true;
   placeButton.remove();
+  arrow.remove();
 });
 
 // Get a reference to the 'Snapshot' button so we can attach a 'click' listener
