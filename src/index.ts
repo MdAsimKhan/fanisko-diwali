@@ -262,6 +262,7 @@ placeButton.addEventListener("click", () => {
   }
 
   placeButton.remove();
+  //@ts-ignore
   arrow.remove();
 });
 
@@ -271,26 +272,23 @@ const canvas = document.getElementById("firecrackerCanvas");
 const imageBtn =
   document.getElementById("image") || document.createElement("div");
 imageBtn.addEventListener("click", () => {
-  // Create an image from the canvas
-  const planeGeometry = new THREE.PlaneGeometry(2, 2);
-  const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-  const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
-  scene.add(planeMesh);
-
-  // Temporarily set the camera to focus on the planeMesh
+  // Create a copy of the camera's current position and rotation
   const originalCameraPosition = camera.position.clone();
-  camera.position.set(
-    planeMesh.position.x,
-    planeMesh.position.y,
-    planeMesh.position.z + 5
-  );
+  const originalCameraRotation = camera.rotation.clone();
 
-  camera.lookAt(planeMesh.position);
+  // Move the camera to a position that captures the entire scene
+  camera.position.set(0, 0, 5); // Adjust the position as needed
+  camera.lookAt(0, 0, 0);
 
   // Render the scene
   renderer.render(scene, camera);
-  // Convert canvas data to url
-  const url = canvas.toDataURL("image/jpeg", 0.8);
+
+  // Take a snapshot of the entire scene
+  const url = renderer.domElement.toDataURL("image/jpeg", 0.8);
+
+  // Restore the original camera position and rotation
+  camera.position.copy(originalCameraPosition);
+  camera.rotation.copy(originalCameraRotation);
 
   // Take snapshot
   ZapparSharing({
@@ -299,26 +297,26 @@ imageBtn.addEventListener("click", () => {
 });
 
 // video capture
-const videoBtn =
-  document.getElementById("video") || document.createElement("div");
-let isRecording = false;
-ZapparVideoRecorder.createCanvasVideoRecorder(canvas, {}).then((recorder) => {
-  videoBtn.addEventListener("click", () => {
-    if (!isRecording) {
-      isRecording = true;
-      recorder.start();
-    } else {
-      isRecording = false;
-      recorder.stop();
-    }
-  });
+// const videoBtn =
+//   document.getElementById("video") || document.createElement("div");
+// let isRecording = false;
+// ZapparVideoRecorder.createCanvasVideoRecorder(canvas, {}).then((recorder) => {
+//   videoBtn.addEventListener("click", () => {
+//     if (!isRecording) {
+//       isRecording = true;
+//       recorder.start();
+//     } else {
+//       isRecording = false;
+//       recorder.stop();
+//     }
+//   });
 
-  recorder.onComplete.bind(async (res) => {
-    ZapparSharing({
-      data: await res.asDataURL(),
-    });
-  });
-});
+//   recorder.onComplete.bind(async (res) => {
+//     ZapparSharing({
+//       data: await res.asDataURL(),
+//     });
+//   });
+// });
 
 // Use a function to render our scene as usual
 function render(): void {
