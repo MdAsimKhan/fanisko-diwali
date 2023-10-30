@@ -98,6 +98,14 @@ gltfLoader.load(
     gltf.scene.visible = false;
     gltf.scene.scale.set(0.15, 0.25, 0.25);
     gltf.scene.position.set(0, -0.2, 0);
+
+    const spotLight = new THREE.SpotLight(0xffffff);
+    spotLight.position.set(0, 3, 0); // Set the position of the spotlight
+    spotLight.target = mymodel; // Optionally, you can set a target for the spotlight
+    spotLight.angle = Math.PI / 8; // Set the spotlight cone angle
+    spotLight.intensity = 2; // Set the intensity of the spotlight
+
+    gltf.scene.add(spotLight);
     // console.log(gltf.scene);
   },
   undefined,
