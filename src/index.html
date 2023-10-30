@@ -19,18 +19,17 @@
  
     
     <div class="container">
-        <button id="firecrackerButton" style="position: absolute; top: 10px; left: 10px; z-index: 1;">Launch Firecrackers</button>
-        <div id="tap-to-place">Tap to Place</div>
+        <!-- <button id="firecrackerButton" style="position: absolute; top: 10px; left: 10px; z-index: 1;">Launch Firecrackers</button> -->
+        <div class="instruction" id="arrow2">
+            <img id="arrow" src="../assets/arrow.png" alt="Arrow" class="arrow">
+            <p>Click on the gift box</p>
+        </div>
+        <img id="tap-to-place" class="gift-box" src="../assets/tap.png"  />
         <div class="text-container">
-            <div class="left-text selected-text">
-                Image
-            </div>
-            <div class="right-text">
-                Video
-            </div>
+      
         </div>
         <div id="image" class="btn"></div>
-        <div id="video" class="btn"></div>
+        <!-- <div id="video" class="btn"></div> -->
     </div>
 </body>
 
@@ -44,6 +43,10 @@
     photoButton.style.display = "block";
 //firecracker
 function createFirecrackerAnimation() {
+
+    imageButton.style.visibility = "visible";
+        imageButton.classList.add("bounce");
+
   var c = document.getElementById("firecrackerCanvas");
   var ctx = c.getContext("2d");
 
@@ -84,7 +87,7 @@ function createFirecrackerAnimation() {
     shell.y = 1;
     shell.xoff = (0.01 + Math.random() * 0.007) * (left ? 1 : -1);
     shell.yoff = 0.01 + Math.random() * 0.007;
-    shell.size = Math.random() * 6 + 10;
+    shell.size = Math.random() * 6 +4;
     shell.color = colors[Math.floor(Math.random() * colors.length)];
 
     shells.push(shell);
@@ -173,8 +176,12 @@ function createFirecrackerAnimation() {
   Run();
 }
 
-const firecrackerButton = document.getElementById("firecrackerButton");
-firecrackerButton.addEventListener("click", createFirecrackerAnimation);
+const firecrackerButton = document.getElementById("tap-to-place");
+const imageButton = document.getElementById("image");
+imageButton.style.visibility = "hidden";
+firecrackerButton.addEventListener("click", createFirecrackerAnimation 
+
+);
 
 
     // Add click event listeners to the text elements

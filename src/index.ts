@@ -4,12 +4,14 @@
 // In this example we track a 3D model using instant world tracking
 
 import * as THREE from "three";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import * as ZapparThree from "@zappar/zappar-threejs";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import ZapparSharing from "@zappar/sharing";
 import * as ZapparVideoRecorder from "@zappar/video-recorder";
 const model = new URL("../assets/diwali_3d_poster.glb", import.meta.url).href;
 import "./index.css";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 // The SDK is supported on many different browsers, but there are some that
 // don't provide camera access. This function detects if the browser is supported
 // For more information on support, check out the readme over at
@@ -72,16 +74,16 @@ const instantTrackerGroup = new ZapparThree.InstantWorldAnchorGroup(
 scene.add(instantTrackerGroup);
 
 //==================FRAME============================
-const frameSrc = new URL("../assets/frame.png", import.meta.url).href;
-const frameTexture = new THREE.TextureLoader(manager).load(frameSrc);
-const frame = new THREE.Mesh(
-  new THREE.PlaneBufferGeometry(),
-  new THREE.MeshBasicMaterial({ map: frameTexture, transparent: true })
-);
-frame.scale.set(2, 3.3, 1);
-// frame.position.set(0, 0, -0.1);
-instantTrackerGroup.add(frame);
-console.log(frame);
+// const frameSrc = new URL("../assets/frame.png", import.meta.url).href;
+// const frameTexture = new THREE.TextureLoader(manager).load(frameSrc);
+// const frame = new THREE.Mesh(
+//   new THREE.PlaneBufferGeometry(),
+//   new THREE.MeshBasicMaterial({ map: frameTexture, transparent: true })
+// );
+// frame.scale.set(2, 3.3, 1);
+// // frame.position.set(0, 0, -0.1);
+// instantTrackerGroup.add(frame);
+// console.log(frame);
 
 // Load a 3D model to place within our group (using ThreeJS's GLTF loader)
 // Pass our loading manager in to ensure the progress bar works correctly
@@ -96,6 +98,14 @@ gltfLoader.load(
     gltf.scene.visible = false;
     gltf.scene.scale.set(0.15, 0.25, 0.25);
     gltf.scene.position.set(0, -0.2, 0);
+
+    const spotLight = new THREE.SpotLight(0xffffff);
+    spotLight.position.set(0, 3, 0); // Set the position of the spotlight
+    spotLight.target = mymodel; // Optionally, you can set a target for the spotlight
+    spotLight.angle = Math.PI / 8; // Set the spotlight cone angle
+    spotLight.intensity = 2; // Set the intensity of the spotlight
+
+    gltf.scene.add(spotLight);
     // console.log(gltf.scene);
   },
   undefined,
@@ -215,12 +225,53 @@ instantTrackerGroup.add(ambientLight);
 // the content to appear using setAnchorPoseFromCameraOffset (see below)
 // The user can confirm the location by tapping on the screen
 let hasPlaced = false;
+
+const arrow = document.getElementById("arrow2");
 const placeButton =
   document.getElementById("tap-to-place") || document.createElement("div");
 placeButton.addEventListener("click", () => {
   hasPlaced = true;
   mymodel.visible = true;
+  particles.visible = false;
+
+  //add fanisko text
+
+  //=====================ADDING 3D TEXT===============
+
+  // Load your font
+  // Create a font loader
+  const fontLoader = new FontLoader();
+
+  // Use the default font (helvetiker) - you can choose a different one if desired
+  fontLoader.load(
+    "https://cdn.rawgit.com/mrdoob/three.js/r125/examples/fonts/helvetiker_regular.typeface.json",
+    function (font) {
+      createText(font);
+    }
+  );
+
+  function createText(font: any) {
+    const textGeometry = new TextGeometry("FANISKO \n WISHES YOU", {
+      font: font,
+      size: 0.2, // Adjust the size as needed
+      height: 0.05, // Adjust the thickness as needed
+    });
+
+    const textMaterial = new THREE.MeshBasicMaterial({ color: 0xf4a146 }); // Adjust the text color as needed
+    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+    textMesh.scale.set(0.8, 0.8, 0.8);
+    textMesh.position.x = -1;
+    textMesh.position.y = 2;
+    // Position the text within your scene
+    // textMesh.position.set(-1, 0.2, -3); // Adjust the position as needed
+
+    // Add the text to the scene
+    instantTrackerGroup.add(textMesh);
+  }
+
   placeButton.remove();
+  //@ts-ignore
+  arrow.remove();
 });
 
 // Get a reference to the 'Snapshot' button so we can attach a 'click' listener
@@ -229,26 +280,23 @@ const canvas = document.getElementById("firecrackerCanvas");
 const imageBtn =
   document.getElementById("image") || document.createElement("div");
 imageBtn.addEventListener("click", () => {
-  // Create an image from the canvas
-  const planeGeometry = new THREE.PlaneGeometry(2, 2);
-  const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-  const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
-  scene.add(planeMesh);
-
-  // Temporarily set the camera to focus on the planeMesh
+  // Create a copy of the camera's current position and rotation
   const originalCameraPosition = camera.position.clone();
-  camera.position.set(
-    planeMesh.position.x,
-    planeMesh.position.y,
-    planeMesh.position.z + 5
-  );
+  const originalCameraRotation = camera.rotation.clone();
 
-  camera.lookAt(planeMesh.position);
+  // Move the camera to a position that captures the entire scene
+  camera.position.set(0, 0, 5); // Adjust the position as needed
+  camera.lookAt(0, 0, 0);
 
   // Render the scene
   renderer.render(scene, camera);
-  // Convert canvas data to url
-  const url = canvas.toDataURL("image/jpeg", 0.8);
+
+  // Take a snapshot of the entire scene
+  const url = renderer.domElement.toDataURL("image/jpeg", 0.8);
+
+  // Restore the original camera position and rotation
+  camera.position.copy(originalCameraPosition);
+  camera.rotation.copy(originalCameraRotation);
 
   // Take snapshot
   ZapparSharing({
@@ -257,26 +305,26 @@ imageBtn.addEventListener("click", () => {
 });
 
 // video capture
-const videoBtn =
-  document.getElementById("video") || document.createElement("div");
-let isRecording = false;
-ZapparVideoRecorder.createCanvasVideoRecorder(canvas, {}).then((recorder) => {
-  videoBtn.addEventListener("click", () => {
-    if (!isRecording) {
-      isRecording = true;
-      recorder.start();
-    } else {
-      isRecording = false;
-      recorder.stop();
-    }
-  });
+// const videoBtn =
+//   document.getElementById("video") || document.createElement("div");
+// let isRecording = false;
+// ZapparVideoRecorder.createCanvasVideoRecorder(canvas, {}).then((recorder) => {
+//   videoBtn.addEventListener("click", () => {
+//     if (!isRecording) {
+//       isRecording = true;
+//       recorder.start();
+//     } else {
+//       isRecording = false;
+//       recorder.stop();
+//     }
+//   });
 
-  recorder.onComplete.bind(async (res) => {
-    ZapparSharing({
-      data: await res.asDataURL(),
-    });
-  });
-});
+//   recorder.onComplete.bind(async (res) => {
+//     ZapparSharing({
+//       data: await res.asDataURL(),
+//     });
+//   });
+// });
 
 // Use a function to render our scene as usual
 function render(): void {
